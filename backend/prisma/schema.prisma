@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  role      String    @default("user")
+  createdAt DateTime  @default(now())
+  vehicleId Int?      @unique
+  vehicle   Vehicle? @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+}
+
+model Vehicle {
+  id              Int             @id @default(autoincrement())
+  name            String
+  lisensePlate    String          @unique
+  type            String
+  route           String
+  status          String          @default("stopped")
+  lastPosition    String
+  updatedAt       DateTime        @updatedAt
+  user            User?
+  vehicleStatuses VehicleStatus[]
+}
+
+model VehicleStatus {
+  id          Int      @id @default(autoincrement())
+  status      String
+  dateTime    DateTime
+  position    String
+  information String
+  vehicleId   Int
+  updatedAt   DateTime @default(now())
+  vehicle     Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+}

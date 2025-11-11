@@ -1,0 +1,50 @@
+name: CI/CD Docker
+
+# Workflow jalan setiap push ke branch main
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout repo
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # 2️⃣ Login ke Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}  # Docker Hub username
+          password: ${{ secrets.DOCKER_PASSWORD }}  # Docker Hub password atau access token
+
+      # 3️⃣ Build & push backend image
+      - name: Build & push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend       # folder backend
+          push: true
+          tags: ${{ secrets.BACKEND_IMAGE }}:latest  # contoh: username/backend
+
+      # 4️⃣ Build & push frontend image
+      - name: Build & push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend     # folder frontend
+          push: true
+          tags: ${{ secrets.FRONTEND_IMAGE }}:latest  # contoh: username/frontend
+
+      # 5️⃣ Deploy ke VPS lewat SSH
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.VPS_HOST }}        # IP atau hostname VPS
+          username: ${{ secrets.VPS_USER }}    # user SSH VPS
+          key: ${{ secrets.VPS_SSH_KEY }}      # private key SSH (GitHub Secret)
+          script: |
+            cd /home/ubuntu/my-project          # folder tempat docker-compose.yml
+            docker-compose pull                 # ambil image terbaru dari Docker Hub
+            docker-compose up -d                # restart container di background

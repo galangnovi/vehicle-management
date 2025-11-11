@@ -1,0 +1,138 @@
+openapi: 3.0.0
+info:
+  title: vehicle-management
+  version: 1.0.0
+  description: ''
+servers:
+  - url: http://localhost:3000
+paths:
+  /auth/login:
+    post:
+      summary: Login User
+      tags:
+        - Authenticate
+      responses: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: color
+  /auth/logout:
+    post:
+      summary: Logout
+      tags:
+        - Authenticate
+      responses: {}
+      security:
+        - BearerAuth: []
+  /auth/refresh:
+    post:
+      summary: Get New AccessToken With RefreshToken
+      tags:
+        - Authenticate
+      responses: {}
+  /user/all-user:
+    get:
+      summary: Get All Data User
+      tags:
+        - User Management
+      responses: {}
+      security:
+        - BearerAuth: []
+  /user/new-user:
+    post:
+      summary: Create Data User
+      tags:
+        - User Management
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: color
+  /user/edit-user/93:
+    put:
+      summary: Edit Data User
+      tags:
+        - User Management
+      responses: {}
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: color
+  /user/delete-user/93:
+    delete:
+      summary: Delete Data User
+      tags:
+        - User Management
+      responses: {}
+      security:
+        - BearerAuth: []
+  /vehicle/all-vehicle:
+    get:
+      summary: Get All Data Vehicle With Pagination & Filter
+      tags:
+        - Vehicle
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: updatedAt
+          in: query
+          schema:
+            type: string
+      responses: {}
+      security:
+        - BearerAuth: []
+  /vehicle/99:
+    get:
+      summary: Get Detail Vehicle
+      tags:
+        - Vehicle
+      responses: {}
+      security:
+        - BearerAuth: []
+  /download-xlsx/99:
+    get:
+      summary: Download File Exel
+      tags:
+        - Download Exel File
+      responses: {}
+      security:
+        - BearerAuth: []
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
