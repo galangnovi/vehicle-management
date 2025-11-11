@@ -33,7 +33,7 @@ jobs:
       - name: Build & push frontend image
         uses: docker/build-push-action@v6
         with:
-          context: ./frontend     # folder frontend
+          context: ./frontend     
           push: true
           tags: ${{ secrets.FRONTEND_IMAGE }}:latest  # contoh: username/frontend
 
