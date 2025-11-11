@@ -63,17 +63,17 @@ services:
       - postgres
 
   frontend:
-  build:
-    context: ./frontend
-    dockerfile: Dockerfile
-  container_name: frontend_app
-  restart: always
-  ports:
-    - "80:80"
-  networks:
-    - app_network
-  depends_on:
-    - backend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend_app
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - app_network
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:
