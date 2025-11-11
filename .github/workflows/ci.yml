@@ -3,7 +3,7 @@ name: CI/CD Docker
 # Workflow jalan setiap push ke branch main
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   build-and-deploy:
